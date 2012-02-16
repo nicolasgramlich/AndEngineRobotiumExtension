@@ -300,7 +300,7 @@ public class AndEngineSolo extends Solo {
 	}
 
 	public void assertEntityColorRed(final float pExpectedColorRed, final Object pTag) {
-		Assert.assertEquals(pExpectedColorRed, this.getEntityColor(pTag));
+		Assert.assertEquals(pExpectedColorRed, this.getEntityColorRed(pTag));
 	}
 
 	public void assertEntityColorRed(final float pExpectedColorRed, final Object pTag, final float pDelta) {
@@ -316,7 +316,7 @@ public class AndEngineSolo extends Solo {
 	}
 
 	public void assertEntityColorGreen(final float pExpectedColorGreen, final Object pTag) {
-		Assert.assertEquals(pExpectedColorGreen, this.getEntityColorRed(pTag));
+		Assert.assertEquals(pExpectedColorGreen, this.getEntityColorGreen(pTag));
 	}
 
 	public void assertEntityColorGreen(final float pExpectedColorGreen, final Object pTag, final float pDelta) {
