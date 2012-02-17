@@ -9,6 +9,8 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntity.IEntityMatcher;
+import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.sprite.ButtonSprite.State;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.ITouchController;
 import org.andengine.ui.activity.BaseGameActivity;
@@ -410,31 +412,31 @@ public class AndEngineSolo extends Solo {
 	public void assertEntityDetached(final Class<? extends IEntity> pClass, final Object pTag) {
 		Assert.assertFalse(this.getUniqueEntityByTag(pClass, pTag).hasParent());
 	}
-	
+
 	public void assertEntityChild(final Object pExpectedChildTag, final Object pTag) {
 		Assert.assertSame(this.getEntityParent(pExpectedChildTag), this.getUniqueEntityByTag(pTag));
 	}
-	
+
 	public void assertEntityChild(final int pIndex, final Object pExpectedChildTag, final Object pTag) {
 		Assert.assertSame(this.getUniqueEntityByTag(pExpectedChildTag), this.getEntityChild(pIndex, pTag));
 	}
-	
+
 	public void assertEntityChild(final Object pExpectedChildTag, final Class<? extends IEntity> pClass, final Object pTag) {
 		Assert.assertSame(this.getEntityParent(pExpectedChildTag), this.getUniqueEntityByTag(pClass, pTag));
 	}
-	
+
 	public void assertEntityChild(final int pIndex, final Object pExpectedChildTag, final Class<? extends IEntity> pClass, final Object pTag) {
 		Assert.assertSame(this.getUniqueEntityByTag(pExpectedChildTag), this.getEntityChild(pIndex, pClass, pTag));
 	}
-	
+
 	public void assertEntityChild(final Class<? extends IEntity> pExpectedChildClass, final Object pExpectedChildTag, final Object pTag) {
 		Assert.assertSame(this.getEntityParent(pExpectedChildClass, pExpectedChildTag), this.getUniqueEntityByTag(pTag));
 	}
-	
+
 	public void assertEntityChild(final int pIndex, final Class<? extends IEntity> pExpectedChildClass, final Object pExpectedChildTag, final Object pTag) {
 		Assert.assertSame(this.getUniqueEntityByTag(pExpectedChildClass, pExpectedChildTag), this.getEntityChild(pIndex, pTag));
 	}
-	
+
 	public void assertEntityChild(final Class<? extends IEntity> pExpectedChildClass, final Object pExpectedChildTag, final Class<? extends IEntity> pClass, final Object pTag) {
 		Assert.assertSame(this.getEntityParent(pExpectedChildClass, pExpectedChildTag), this.getUniqueEntityByTag(pClass, pTag));
 	}
@@ -457,6 +459,31 @@ public class AndEngineSolo extends Solo {
 
 	public void assertEntityCulled(final Camera pCamera, final Class<? extends IEntity> pClass, final Object pTag) {
 		Assert.assertTrue(this.getUniqueEntityByTag(pClass, pTag).isCulled(pCamera));
+	}
+
+
+	public void assertButtonSpriteEnabled(final Object pTag) {
+		Assert.assertTrue(this.isButtonSpriteEnabled(pTag));
+	}
+
+	public void assertButtonSpriteEnabled(final Class<? extends ButtonSprite> pClass, final Object pTag) {
+		Assert.assertTrue(this.isButtonSpriteEnabled(pClass, pTag));
+	}
+
+	public void assertButtonSpriteDisabled(final Object pTag) {
+		Assert.assertFalse(this.isButtonSpriteEnabled(pTag));
+	}
+
+	public void assertButtonSpriteDisabled(final Class<? extends ButtonSprite> pClass, final Object pTag) {
+		Assert.assertFalse(this.isButtonSpriteEnabled(pClass, pTag));
+	}
+
+	public void assertButtonSpriteState(final State pExpecedState, final Object pTag) {
+		Assert.assertEquals(pExpecedState, this.getButtonSpriteState(ButtonSprite.class, pTag));
+	}
+
+	public void assertButtonSpriteState(final State pExpecedState, final Class<? extends ButtonSprite> pClass, final Object pTag) {
+		Assert.assertEquals(pExpecedState, this.getButtonSpriteState(pClass, pTag));
 	}
 
 	// ===========================================================
@@ -783,6 +810,28 @@ public class AndEngineSolo extends Solo {
 		return result.isCulled(pCamera);
 	}
 
+
+	public boolean isButtonSpriteEnabled(final Object pTag) {
+		return this.isButtonSpriteEnabled(ButtonSprite.class, pTag);
+	}
+
+	public boolean isButtonSpriteEnabled(final Class<? extends ButtonSprite> pClass, final Object pTag) {
+		final ButtonSprite result = this.getUniqueEntityByTag(pClass, pTag);
+
+		return result.isEnabled();
+	}
+
+	public State getButtonSpriteState(final Object pTag) {
+		return this.getButtonSpriteState(ButtonSprite.class, pTag);
+	}
+
+	public State getButtonSpriteState(final Class<? extends ButtonSprite> pClass, final Object pTag) {
+		final ButtonSprite result = this.getUniqueEntityByTag(pClass, pTag);
+
+		return result.getState();
+	}
+
+
 	public void clickOnScene(final float pSceneX, final float pSceneY) {
 		final TouchEvent sceneTouchEvent = TouchEvent.obtain(pSceneX, pSceneY, TouchEvent.ACTION_DOWN, 0, null);
 
@@ -816,10 +865,10 @@ public class AndEngineSolo extends Solo {
 		return result.get(0);
 	}
 
-	public IEntity getUniqueEntityByTag(final Class<? extends IEntity> pClass, final Object pTag) {
+	public <T extends IEntity> T getUniqueEntityByTag(final Class<T> pClass, final Object pTag) {
 		final ArrayList<IEntity> result = this.querySceneByTag(pClass, pTag);
 		this.assertListSize(1, result);
-		return result.get(0);
+		return pClass.cast(result.get(0));
 	}
 
 	public ArrayList<IEntity> querySceneByTag(final Class<? extends IEntity> pClass, final Object pTag) {
