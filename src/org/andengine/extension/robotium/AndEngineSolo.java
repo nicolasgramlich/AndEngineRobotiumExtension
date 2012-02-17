@@ -810,23 +810,19 @@ public class AndEngineSolo extends Solo {
 		touchController.onHandleMotionEvent(upEvent);
 	}
 
-	private IEntity getUniqueEntityByTag(final Object pTag) {
+	public IEntity getUniqueEntityByTag(final Object pTag) {
 		final ArrayList<IEntity> result = this.querySceneByTag(pTag);
 		this.assertListSize(1, result);
 		return result.get(0);
 	}
 
-	private IEntity getUniqueEntityByTag(final Class<? extends IEntity> pClass, final Object pTag) {
+	public IEntity getUniqueEntityByTag(final Class<? extends IEntity> pClass, final Object pTag) {
 		final ArrayList<IEntity> result = this.querySceneByTag(pClass, pTag);
 		this.assertListSize(1, result);
 		return result.get(0);
 	}
 
-	private void assertListSize(final int pSize, final List<IEntity> pEntityList) {
-		Assert.assertEquals(pSize, pEntityList.size());
-	}
-
-	private ArrayList<IEntity> querySceneByTag(final Class<? extends IEntity> pClass, final Object pTag) {
+	public ArrayList<IEntity> querySceneByTag(final Class<? extends IEntity> pClass, final Object pTag) {
 		return this.getEngine().getScene().query(new IEntityMatcher() {
 			@Override
 			public boolean matches(final IEntity pEntity) {
@@ -835,13 +831,17 @@ public class AndEngineSolo extends Solo {
 		});
 	}
 
-	private ArrayList<IEntity> querySceneByTag(final Object pTag) {
+	public ArrayList<IEntity> querySceneByTag(final Object pTag) {
 		return this.getEngine().getScene().query(new IEntityMatcher() {
 			@Override
 			public boolean matches(final IEntity pEntity) {
 				return pTag.equals(pEntity.getUserData());
 			}
 		});
+	}
+
+	private void assertListSize(final int pSize, final List<IEntity> pEntityList) {
+		Assert.assertEquals(pSize, pEntityList.size());
 	}
 
 	// ===========================================================
