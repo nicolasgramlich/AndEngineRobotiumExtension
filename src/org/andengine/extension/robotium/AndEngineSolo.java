@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.IEntity.IEntityMatcher;
+import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.State;
 import org.andengine.input.touch.TouchEvent;
