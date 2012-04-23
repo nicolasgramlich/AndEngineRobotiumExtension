@@ -787,7 +787,7 @@ public class AndEngineSolo extends Solo {
 	public IEntity getEntityChild(final int pIndex, final Class<? extends IEntity> pClass, final Object pTag) {
 		final IEntity result = this.getUniqueEntityByTag(pClass, pTag);
 
-		return result.getChild(pIndex);
+		return result.getChildByIndex(pIndex);
 	}
 
 	public boolean isEntityCullingEnabled(final Object pTag) {
