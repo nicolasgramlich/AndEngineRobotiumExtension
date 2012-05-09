@@ -15,7 +15,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.ITouchController;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.Constants;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import android.app.Activity;
 import android.app.Instrumentation;
