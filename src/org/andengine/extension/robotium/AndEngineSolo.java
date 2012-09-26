@@ -529,6 +529,45 @@ public class AndEngineSolo extends Solo {
 
 		this.clickOnScene(sceneX, sceneY);
 	}
+	/**
+	 * Inject a click on the center of an ChildScene {@link IEntity}.
+	 *
+	 * @param pClass
+	 * @param pTag
+	 */
+	public void clickOnChildSceneEntity(final Object pTag) {
+		this.clickOnChildSceneEntity(IEntity.class, pTag);
+	}
+
+	/**
+	 * Inject a click on the center of an {@link IEntity}.
+	 *
+	 * @param pClass
+	 * @param pTag
+	 */
+	public void clickOnChildSceneEntity(final Class<? extends IEntity> pClass, final Object pTag) {
+		final IEntity result = this.getUniqueChildSceneEntityByTag(pTag);
+
+		final float[] sceneCenterCoordinate = result.getSceneCenterCoordinates();
+		final float sceneX = sceneCenterCoordinate[Constants.VERTEX_INDEX_X];
+		final float sceneY = sceneCenterCoordinate[Constants.VERTEX_INDEX_Y];
+
+		this.clickOnScene(sceneX, sceneY);
+	}
+
+	public void clickOnChildSceneEntity(final Object pTag, final float pLocalX, final float pLocalY) {
+		this.clickOnChildSceneEntity(IEntity.class, pTag, pLocalX, pLocalY);
+	}
+
+	public void clickOnChildSceneEntity(final Class<? extends IEntity> pClass, final Object pTag, final float pLocalX, final float pLocalY) {
+		final IEntity result = this.getUniqueEntityByTag(pClass, pTag);
+
+		final float[] sceneCenterCoordinate = result.convertLocalToSceneCoordinates(pLocalX, pLocalY);
+		final float sceneX = sceneCenterCoordinate[Constants.VERTEX_INDEX_X];
+		final float sceneY = sceneCenterCoordinate[Constants.VERTEX_INDEX_Y];
+
+		this.clickOnScene(sceneX, sceneY);
+	}
 
 	public boolean isEntityVisible(final Object pTag) {
 		return this.isEntityVisible(IEntity.class, pTag);
@@ -870,6 +909,20 @@ public class AndEngineSolo extends Solo {
 		this.assertListSize(1, result);
 		return pClass.cast(result.get(0));
 	}
+	
+	public IEntity getUniqueChildSceneEntityByTag(final Object pTag) {
+		Assert.assertTrue(this.getEngine().getScene().hasChildScene());
+		final ArrayList<IEntity> result = this.queryChildSceneByTag(pTag);
+		this.assertListSize(1, result);
+		return result.get(0);
+	}
+
+	public <T extends IEntity> T getUniqueChildEntityByTag(final Class<T> pClass, final Object pTag) {
+		Assert.assertTrue(this.getEngine().getScene().hasChildScene());
+		final ArrayList<IEntity> result = this.queryChildSceneByTag(pClass, pTag);
+		this.assertListSize(1, result);
+		return pClass.cast(result.get(0));
+	}
 
 	public ArrayList<IEntity> querySceneByTag(final Class<? extends IEntity> pClass, final Object pTag) {
 		return this.getEngine().getScene().query(new IEntityMatcher() {
@@ -882,6 +935,24 @@ public class AndEngineSolo extends Solo {
 
 	public ArrayList<IEntity> querySceneByTag(final Object pTag) {
 		return this.getEngine().getScene().query(new IEntityMatcher() {
+			@Override
+			public boolean matches(final IEntity pEntity) {
+				return pTag.equals(pEntity.getUserData());
+			}
+		});
+	}
+	
+	public ArrayList<IEntity> queryChildSceneByTag(final Class<? extends IEntity> pClass, final Object pTag) {
+		return this.getEngine().getScene().getChildScene().query(new IEntityMatcher() {
+			@Override
+			public boolean matches(final IEntity pEntity) {
+				return pClass.isInstance(pEntity) && pTag.equals(pEntity.getUserData());
+			}
+		});
+	}
+
+	public ArrayList<IEntity> queryChildSceneByTag(final Object pTag) {
+		return this.getEngine().getScene().getChildScene().query(new IEntityMatcher() {
 			@Override
 			public boolean matches(final IEntity pEntity) {
 				return pTag.equals(pEntity.getUserData());
