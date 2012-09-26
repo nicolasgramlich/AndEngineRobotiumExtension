@@ -15,7 +15,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.ITouchController;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.Constants;
-import org.andengine.util.adt.color.Color;
+import org.andengine.util.color.Color;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -523,7 +523,7 @@ public class AndEngineSolo extends Solo {
 	public void clickOnEntity(final Class<? extends IEntity> pClass, final Object pTag, final float pLocalX, final float pLocalY) {
 		final IEntity result = this.getUniqueEntityByTag(pClass, pTag);
 
-		final float[] sceneCenterCoordinate = result.convertLocalCoordinatesToSceneCoordinates(pLocalX, pLocalY);
+		final float[] sceneCenterCoordinate = result.convertLocalToSceneCoordinates(pLocalX, pLocalY);
 		final float sceneX = sceneCenterCoordinate[Constants.VERTEX_INDEX_X];
 		final float sceneY = sceneCenterCoordinate[Constants.VERTEX_INDEX_Y];
 
@@ -836,7 +836,7 @@ public class AndEngineSolo extends Solo {
 		final TouchEvent sceneTouchEvent = TouchEvent.obtain(pSceneX, pSceneY, TouchEvent.ACTION_DOWN, 0, null);
 
 		final Camera camera = this.getEngine().getCamera();
-		camera.convertSceneTouchEventToSurfaceTouchEvent(sceneTouchEvent, camera.getSurfaceWidth(), camera.getSurfaceHeight());
+		camera.convertSceneToSurfaceTouchEvent(sceneTouchEvent, camera.getSurfaceWidth(), camera.getSurfaceHeight());
 
 		final float surfaceX = sceneTouchEvent.getX();
 		final float surfaceY = sceneTouchEvent.getY();
